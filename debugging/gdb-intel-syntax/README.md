@@ -107,3 +107,33 @@ Instruction addresses may differ between disassembly output and runtime because 
 This experiment demonstrated how a C function returns an integer through `EAX/RAX`, how execution returns to the caller, and how GDB can be used to trace register values and assembly instructions across a function call.
 
 **Technical note:** `0x1e` is the hexadecimal representation of decimal `30`. On x86-64, writing to `EAX` zero-extends the value into `RAX`.
+
+## Additional Experiment: Stack Frame and Memory Inspection
+
+### Objective
+Inspect local variables, registers, memory contents, and the saved return address using GDB.
+
+### Results
+
+- Inspected the current stack frame using `info frame`.
+- Retrieved the addresses of `a`, `b`, and `result` using `print &variable`.
+- Confirmed that `result` was stored at `0x7fffffffdcdc` during the observed execution.
+- Used `x/wd` to inspect a 4-byte integer in memory.
+- Used `x/4wx`, `x/4wd`, and `x/4xb` to view memory in hexadecimal, signed decimal, and individual-byte formats.
+- Observed the integer `30` as `0x0000001e`, stored as the bytes `1e 00 00 00` on the little-endian system.
+- Used `watch result` and a direct-address watchpoint to detect the change from `0` to `30`.
+- Read the saved return address with `x/gx $rbp+8` and confirmed that it matched the `saved rip` reported by `info frame`.
+
+### Key Concepts Learned
+
+- **Registers:** Small, fast storage locations used by the CPU during instruction execution.
+- **Stack frame:** The memory area associated with a function call, including local data and saved execution information.
+- **Little-endian:** The least significant byte is stored at the lowest memory address.
+- **Watchpoint:** A debugger feature that stops execution when a watched value changes.
+- **Return address:** The location to which execution resumes after a function returns.
+
+### Conclusion
+
+This practical exercise demonstrated how to trace a C function at source and assembly level, inspect CPU registers and process memory, detect data changes, and verify a saved return address using GDB.
+
+**Lab scope:** This exercise focused on basic GDB debugging and x86-64 Intel-syntax assembly in a controlled local program.
